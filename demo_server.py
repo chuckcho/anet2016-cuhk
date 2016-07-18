@@ -26,7 +26,8 @@ models = [('models/resnet200_anet_2016_deploy.prototxt',
            0.2, 1, False, 224)
           ]
 
-GPU = 0
+#GPU = 0
+GPU = 2
 
 # init global variables
 cls = ActionClassifier(models, dev_id=GPU)
@@ -125,5 +126,5 @@ def upload_url():
 
 if __name__ == "__main__":
     # run the Flask app
-    app.debug = True
-    app.run()
+    #app.debug = True
+    app.run(host='0.0.0.0')
