@@ -5,6 +5,7 @@ from libpydenseflow import TVL1FlowExtractor
 import numpy as np
 import glob
 import os
+from random import shuffle
 
 class FlowExtractor(object):
     def __init__(self, dev_id, bound=20):
@@ -47,11 +48,24 @@ if __name__ == "__main__":
     # resize frame_size
     new_size = (340,256)
 
-    f = FlowExtractor(0)
+    # gpu_id
+    if len(sys.argv) > 1:
+        gpu_id = int(sys.argv[1])
+    else:
+        gpu_id = 1
 
-    all_video_iter = glob.glob(os.path.join(dextro_video_basedir, '*.*'))
-    num_videos = len(all_video_iter)
-    for count, video_file in enumerate(all_video_iter):
+    f = FlowExtractor(gpu_id)
+
+    #all_videos = sorted(
+    #        glob.glob(os.path.join(dextro_video_basedir, '*.*')),
+    #        key=os.path.getsize,
+    #        reverse=True
+    #        )
+    all_videos = glob.glob(os.path.join(dextro_video_basedir, '*.*'))
+    shuffle(all_videos)
+
+    num_videos = len(all_videos)
+    for count, video_file in enumerate(all_videos):
         print "[Info] Processing video_file={} ({}/{})".format(
                 video_file,
                 count,
@@ -63,6 +77,20 @@ if __name__ == "__main__":
             print "[Warning] video_dir={} doesn't exist. Skipping...".format(
                     video_dir)
             continue
+
+        optical_flow_dirname = os.path.join(
+                video_dir.rstrip('/') + '_flow'
+                )
+        lock_file = os.path.join(optical_flow_dirname, '_lock_')
+        if os.path.exists(lock_file):
+            print("[Info] There's another process working on this "
+                  "directory={}. Skipping...".format(optical_flow_dirname))
+            continue
+
+        # mkdir if needed
+        if not os.path.exists(optical_flow_dirname):
+            os.makedirs(optical_flow_dirname)
+
         frames = glob.glob(os.path.join(video_dir, '*.jpg'))
         num_frames = len(frames)
         if not num_frames:
@@ -80,6 +108,9 @@ if __name__ == "__main__":
                           )
                   )
             continue
+
+        # create a lockfile
+        open(lock_file, 'a').close()
         for iter_id in range(num_iters):
             start_frame = iter_id * interval
             end_frame = iter_id * interval + length - 1
@@ -119,9 +150,6 @@ if __name__ == "__main__":
                             start_frame + frm_count/2 + 1
                             )
 
-                    optical_flow_dirname = os.path.join(
-                            video_dir.rstrip('/') + '_flow'
-                            )
                     optical_flow_out_filename = os.path.join(
                             optical_flow_dirname,
                             '{}.{}_{}.jpg'.format(
@@ -135,14 +163,12 @@ if __name__ == "__main__":
                               "Skipping...")
                         continue
 
-                    # mkdir if needed
-                    if not os.path.exists(optical_flow_dirname):
-                        os.makedirs(optical_flow_dirname)
-
                     print "[Debug] Saving output={}...".format(optical_flow_out_filename)
                     cv2.imwrite(
                             optical_flow_out_filename, flow_stack[frm_count]
                             )
+        # delete a lock file
+        os.remove(lock_file)
 
     print "-" * 79
     print "[Info] All done!"
