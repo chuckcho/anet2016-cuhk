@@ -56,13 +56,13 @@ if __name__ == "__main__":
 
     f = FlowExtractor(gpu_id)
 
-    #all_videos = sorted(
-    #        glob.glob(os.path.join(dextro_video_basedir, '*.*')),
-    #        key=os.path.getsize,
-    #        reverse=True
-    #        )
-    all_videos = glob.glob(os.path.join(dextro_video_basedir, '*.*'))
-    shuffle(all_videos)
+    all_videos = sorted(
+            glob.glob(os.path.join(dextro_video_basedir, '*.*')),
+            key=os.path.getsize,
+            reverse=True
+            )
+    #all_videos = glob.glob(os.path.join(dextro_video_basedir, '*.*'))
+    #shuffle(all_videos)
 
     num_videos = len(all_videos)
     for count, video_file in enumerate(all_videos):
@@ -90,6 +90,16 @@ if __name__ == "__main__":
         # mkdir if needed
         if not os.path.exists(optical_flow_dirname):
             os.makedirs(optical_flow_dirname)
+
+        ## skip if there's already OF extracted (first frame)
+        #if os.path.isfile(os.path.join(optical_flow_dirname,
+        #        '{}.000000_000001_x.jpg'.format(video_id))
+        #        ) or \
+        #   os.path.isfile(os.path.join(optical_flow_dirname,
+        #        '{}.000000_x.jpg'.format(video_id))
+        #        ):
+        #    print("[Info] Already extracted! Skipping...")
+        #    continue
 
         frames = glob.glob(os.path.join(video_dir, '*.jpg'))
         num_frames = len(frames)
@@ -145,9 +155,14 @@ if __name__ == "__main__":
                         flow_direction = 'x'
                     else:
                         flow_direction = 'y'
-                    frame_pair_name = "{0:06d}_{1:06d}".format(
-                            start_frame,
-                            start_frame + frm_count/2 + 1
+
+                    #frame_pair_name = "{0:06d}_{1:06d}".format(
+                    #        start_frame,
+                    #        start_frame + frm_count/2 + 1
+                    #        )
+
+                    frame_pair_name = "{0:06d}".format(
+                            start_frame + frm_count/2
                             )
 
                     optical_flow_out_filename = os.path.join(
