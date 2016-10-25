@@ -4,7 +4,6 @@ This files provids facilities for processing videos
 
 import cv2
 
-
 class VideoProc(object):
     """
     The class works with video files and their annotations

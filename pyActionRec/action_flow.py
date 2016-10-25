@@ -38,7 +38,6 @@ class FlowExtractor(object):
 
         return ret
 
-
 if __name__ == "__main__":
     import cv2
     im1 = cv2.imread('../data/img_1.jpg')

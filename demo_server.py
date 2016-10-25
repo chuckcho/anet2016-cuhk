@@ -33,7 +33,12 @@ cls = ActionClassifier(models, dev_id=GPU)
 db = ANetDB.get_db("1.3")
 lb_list = db.get_ordered_label_list()
 
-ydl = youtube_dl.YoutubeDL({u'outtmpl': u'tmp/%(id)s.%(ext)s'})
+ydl = youtube_dl.YoutubeDL(
+        {
+                u'outtmpl': u'tmp/%(id)s.%(ext)s',
+                u'prefer-ffmpeg': True,
+                }
+        )
 
 
 def allowed_file(filename):
@@ -126,4 +131,5 @@ def upload_url():
 if __name__ == "__main__":
     # run the Flask app
     app.debug = True
-    app.run()
+    #app.run()
+    app.run(host= '0.0.0.0')

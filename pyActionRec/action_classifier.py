@@ -9,7 +9,6 @@ import time
 import youtube_dl
 import os
 
-
 def _dummy_vid_info(url=''):
     info_dict = {
         'annotations': list(),
@@ -18,7 +17,6 @@ def _dummy_vid_info(url=''):
         'subset': 'testing'
     }
     return Video('0', info_dict)
-
 
 class ActionClassifier(object):
     """
@@ -140,7 +138,6 @@ class ActionClassifier(object):
 
                 if in_type == 0:
                     # RGB input
-
                     frm_scores.append(net.predict_single_frame(frm_stack[:1], self.__score_name,
                                                                over_sample=not conv_support,
                                                                frame_size=None if net_input_size == 224 else frame_size

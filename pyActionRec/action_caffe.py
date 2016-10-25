@@ -70,5 +70,3 @@ class CaffeNet(object):
         self._net.reshape()
         out = self._net.forward(blobs=[score_name,], data=data)
         return out[score_name].copy()
-
-

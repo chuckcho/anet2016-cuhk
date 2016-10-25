@@ -170,11 +170,10 @@ class ANetDB(object):
         # leaf nodes are those without any child
         leaf_nodes = [name_dict[x] for x
                       in list(set(name_dict.keys()).difference(parents)) + ANET_CFG.FORCE_INCLUDE.setdefault(self.version, [])]
-        sorted_lead_nodes = sorted(leaf_nodes, key=lambda l: l['nodeName'])
-        self._idx_name_table = {i: e['nodeName'] for i, e in enumerate(sorted_lead_nodes)}
-        self._name_idx_table = {e['nodeName']: i for i, e in enumerate(sorted_lead_nodes)}
-        self._name_table = {x['nodeName']: x for x in sorted_lead_nodes}
-
+        sorted_leaf_nodes = sorted(leaf_nodes, key=lambda l: l['nodeName'])
+        self._idx_name_table = {i: e['nodeName'] for i, e in enumerate(sorted_leaf_nodes)}
+        self._name_idx_table = {e['nodeName']: i for i, e in enumerate(sorted_leaf_nodes)}
+        self._name_table = {x['nodeName']: x for x in sorted_leaf_nodes}
 
 if __name__ == '__main__':
     db = ANetDB.get_db("1.3")

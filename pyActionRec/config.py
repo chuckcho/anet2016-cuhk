@@ -11,7 +11,6 @@ if ANET_CFG.ANET_HOME is None:
     raise ValueError("To use this package, "
                      "set the environmental variable \"ANET_HOME\" to the root director of the codebase")
 
-
 # Version and other macro settings
 
 ANET_CFG.DB_VERSIONS = {
