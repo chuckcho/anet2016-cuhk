@@ -88,6 +88,7 @@ For a quick start, we have set up a public demo server at
 The server runs on the Titan X GPU awarded for winning the challenge. Thanks to the organizers!
 
 ##Related Projects
+* [Temporal Segment Networks (TSN)][tsn] models for the challenge are trained under the TSN framework.
 * Our modified [Caffe][caffe] with fast parallel training and Video data IO
 * [Dense Flow][df] toolkit for optical flow extraction
 * [Very deep two-stream convnets][deep_2stream]
@@ -105,3 +106,4 @@ Released under [BSD 2-Clause license][license].
 [df]:https://github.com/yjxiong/dense_flow
 [tdd]:https://github.com/wanglimin/TDD
 [deep_2stream]:http://personal.ie.cuhk.edu.hk/~xy012/others/action_recog/
+[tsn]:https://github.com/yjxiong/temporal-segment-networks
